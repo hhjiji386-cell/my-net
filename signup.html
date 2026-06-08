@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Utility Monitoring — Auth System</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://w3.org' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230F172A'/%3E%3Cpath d='M50 20 L70 50 L50 80 L30 50 Z' fill='%23FACC15'/%3E%3C/svg%3E">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .login-shell {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .login-card {
+            background-color: #1e293b;
+            padding: 32px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #facc15;
+        }
+
+        p {
+            font-size: 14px;
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        .field-group {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 6px;
+            color: #94a3b8;
+        }
+
+        input {
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            color: #f8fafc;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 100%;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1e88e5;
+        }
+
+        .button-primary {
+            width: 100%;
+            background-color: #facc15;
+            color: #0f172a;
+            font-weight: 700;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            text-align: center;
+        }
+
+        .button-primary:hover {
+            opacity: 0.9;
+        }
+
+        .toggle-link {
+            display: block;
+            margin-top: 16px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 14px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .toggle-link:hover {
+            color: #facc15;
+        }
+
+        /* Qari shaqada kale marka la joogo Login ama Signup */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <main class="login-shell">
+        <section class="login-card">
+            
+            <!-- ====== SHASHAADDA LOGIN ====== -->
+            <div id="login-box">
+                <h1>Login to Dashboard</h1>
+                <p>Enter credentials to view the real-time IoT utility monitoring system.</p>
+                <form id="login-form">
+                    <div class="field-group">
+                        <label for="username">Email / Username</label>
+                        <input id="username" type="text" placeholder="admin" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="password">Password</label>
+                        <input id="password" type="password" placeholder="1234" required>
+                    </div>
+                    <button class="button-primary" type="submit">Sign In</button>
+                </form>
+                <div style="margin-top:16px; text-align:center;">
+                    <a href="dashboard.html?session=active" class="button-primary" style="display:inline-block; background:#1e88e5; padding:12px 18px; text-decoration:none; border-radius:8px; margin-bottom: 12px;">Open Dashboard Directly</a>
+                    <p style="color:#94a3b8; font-size:12px; margin-bottom:12px;">Demo account: admin / 1234</p>
+                    <span class="toggle-link" id="go-to-signup">Don't have an account? Create one here</span>
+                </div>
+            </div>
+
+            <!-- ====== SHASHAADDA SIGN UP ====== -->
+            <div id="signup-box" class="hidden">
+                <h1>Create Account</h1>
+                <p>Sign up to monitor your custom IoT station telemetry.</p>
+                <form id="signup-form">
+                    <div class="field-group">
+                        <label for="new-username">Choose Username</label>
+                        <input id="new-username" type="text" placeholder="e.g., garowe_user" required>
+                    </div>
+                    <div class="field-group">
+                        <label for="new-password">Create Password</label>
+                        <input id="new-password" type="password" placeholder="••••••••" required>
+                    </div>
+                    <button class="button-primary" style="background-color: #1e88e5; color: white;" type="submit">Register Account</button>
+                </form>
+                <span class="toggle-link" id="go-to-login">Already have an account? Log In</span>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- ====== MAAMULKA IS-BEDDELKA IYO AUTH ====== -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const loginBox = document.getElementById("login-box");
+            const signupBox = document.getElementById("signup-box");
+            
+            const goToSignup = document.getElementById("go-to-signup");
+            const goToLogin = document.getElementById("go-to-login");
+
+            // 1. Isku beddelka shaashadaha (Toggle View)
+            goToSignup.addEventListener("click", () => {
+                loginBox.classList.add("hidden");
+                signupBox.classList.remove("hidden");
+            });
+
+            goToLogin.addEventListener("click", () => {
+                signupBox.classList.add("hidden");
+                loginBox.classList.remove("hidden");
+            });
+
+            // 2. Maamulka Sign Up (Diiwangelinta)
+            document.getElementById("signup-form").addEventListener("submit", (e) => {
+                e.preventDefault();
+                const u = document.getElementById("new-username").value.trim();
+                const p = document.getElementById("new-password").value;
+                
+                // Kaydi koontada cusub
+                localStorage.setItem("saved_user", u);
+                localStorage.setItem("saved_pass", p);
+                
+                alert("🎉 Account Registered Successfully! Now login with your new details.");
+                
+                // U celi shaashadda Login-ka
+                signupBox.classList.add("hidden");
+                loginBox.classList.remove("hidden");
+                
+                // Ku shub magacii uu isku diiwangeliyay sanduuqa login-ka
+                document.getElementById("username").value = u;
+            });
+
+            // 3. Maamulka Login (Gidhibalka)
+            document.getElementById("login-form").addEventListener("submit", (event) => {
+                event.preventDefault();
+
+                const usernameInput = document.getElementById("username").value.trim();
+                const passwordInput = document.getElementById("password").value;
+                
+                // Soo aqri wixii la kaydiyay hadday jiraan
+                const savedU = localStorage.getItem("saved_user");
+                const savedP = localStorage.getItem("saved_pass");
+
+                if ((usernameInput === "admin" && passwordInput === "1234") || (usernameInput === savedU && passwordInput === savedP)) {
+                    window.location.href = "dashboard.html?session=active";
+                } else {
+                    alert("❌ Invalid username or password! Please try again.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
